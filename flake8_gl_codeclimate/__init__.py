@@ -29,14 +29,23 @@ class GitlabCodeClimateFormatter(BaseFormatter):
             return "pyflakes"
         elif v.code.startswith("E") or v.code.startswith("W"):
             return "pycodestyle"
+        elif v.code.startswith("G"):
+            return "logging-format"
 
         # TODO: Check the flake8 extensions entrypoint - it should list
-        #       error code to tools...
+        #       error code that extensions are using...
+        #
+        #       Hmm, except flake8-logging-format does not use
+        #           G = logging_format.api:LoggingFormatValidator
+        #       And even if it would, we would still need to do some magic
+        #       matching...
         return "unknown"
 
     @classmethod
     def _guess_categories(cls, v):
         """
+        Try to guess the category the violation falls in.
+
         categories = {
             "Bug Risk"
             "Clarity"
@@ -47,10 +56,14 @@ class GitlabCodeClimateFormatter(BaseFormatter):
             "Security"
             "Style"
         }
+
+        TODO: This isn't really implemented.
         """
         result = []
         if cls._guess_check_name(v) == "pycodestyle":
             result.append("Style")
+        if cls._guess_check_name(v) == "mccabe":
+            result.append("Complexity")
 
         # Need at least one? Default to BugRisk
         if not result:

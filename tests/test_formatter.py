@@ -35,6 +35,24 @@ class TestGitlabCodeClimateFormatter(unittest.TestCase):
             physical_line=None,
         )
 
+        self.logging_error = Violation(
+            code="G001",  # This is coming from flake8-logging-format
+            filename="examples/logging-format.py",
+            line_number=4,
+            column_number=None,
+            text="Logging statement uses string.format()",
+            physical_line=None,
+        )
+
+        self.complexity_error = Violation(
+            code="C901",  # This is coming from flake8-logging-format
+            filename="examples/complex-code.py",
+            line_number=42,
+            column_number=None,
+            text="Something is too complex",
+            physical_line=None,
+        )
+
     def tearDown(self):
         try:
             os.unlink(self.options.output_file)
@@ -73,3 +91,26 @@ class TestGitlabCodeClimateFormatter(unittest.TestCase):
         self.assertEqual(2, len(violations))
         self.assertEqual("issue", violations[1]["type"])
         self.assertEqual("unknown", violations[1]["check_name"])
+
+    def test_logging_errro(self):
+        self.formatter.start()
+        self.formatter.handle(self.logging_error)
+        self.formatter.stop()
+
+        with open(self.options.output_file) as fp:
+            violations = json.load(fp)
+
+        self.assertEqual(1, len(violations))
+        self.assertEqual("logging-format", violations[0]["check_name"])
+
+    def test_complexity_error(self):
+        self.formatter.start()
+        self.formatter.handle(self.complexity_error)
+        self.formatter.stop()
+
+        with open(self.options.output_file) as fp:
+            violations = json.load(fp)
+
+        self.assertEqual(1, len(violations))
+        self.assertEqual("mccabe", violations[0]["check_name"])
+        self.assertEqual(["Complexity"], violations[0]["categories"])

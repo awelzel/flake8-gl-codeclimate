@@ -3,7 +3,7 @@ import setuptools
 setuptools.setup(
     name="flake8-gl-codeclimate",
     license="MIT",
-    version="0.1.1",
+    version="0.1.2",
     description="Gitlab Code Quality artifact Flake8 formatter.",
     author="Arne Welzel",
     author_email="arne.welzel@gmail.com",
