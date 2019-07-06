@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Convert an existing violation report to a Gitlab Code Climate artifact.
 
@@ -11,7 +12,7 @@ import logging
 import re
 import sys
 
-from flake8_gitlab_codeclimate import formatter
+import flake8_gl_codeclimate
 from flake8.style_guide import Violation
 
 
@@ -54,7 +55,7 @@ def main():
     args = parser.parse_args()
 
     ccs = []
-    fmt = formatter.GitlabCodeClimateFormatter
+    fmt = flake8_gl_codeclimate.GitlabCodeClimateFormatter
     for l in args.input:
         v = violation_from_pylint_line(l)
         cc = fmt._violation_to_codeclimate_issue(v)

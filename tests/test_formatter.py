@@ -1,0 +1,75 @@
+import json
+import os
+import tempfile
+import unittest
+import unittest.mock
+
+from flake8.style_guide import Violation
+
+from flake8_gl_codeclimate import GitlabCodeClimateFormatter
+
+
+class TestGitlabCodeClimateFormatter(unittest.TestCase):
+
+    def setUp(self):
+        self.options = unittest.mock.Mock(["output_file", "tee"])
+        self.options.output_file = tempfile.mktemp(suffix=".json", dir=".")
+        self.options.tee = False
+
+        self.formatter = GitlabCodeClimateFormatter(self.options)
+        self.error1 = Violation(
+            code="E302",
+            filename="examples/hello-world.py",
+            line_number=23,
+            column_number=None,
+            text="expected 2 blank lines, found 1",
+            physical_line=None,
+        )
+
+        self.error2 = Violation(
+            code="X111",  # unknown
+            filename="examples/unknown.py",
+            line_number=99,
+            column_number=None,
+            text="Some extension produced this.",
+            physical_line=None,
+        )
+
+    def tearDown(self):
+        try:
+            os.unlink(self.options.output_file)
+        except FileNotFoundError:
+            pass
+
+    def test_no_errors(self):
+        self.formatter.start()
+        self.formatter.stop()
+        with open(self.options.output_file) as fp:
+            violations = json.load(fp)
+        self.assertEqual(0, len(violations))
+
+    def test_error1(self):
+        self.formatter.start()
+        self.formatter.handle(self.error1)
+        self.formatter.stop()
+
+        with open(self.options.output_file) as fp:
+            violations = json.load(fp)
+
+        self.assertEqual(1, len(violations))
+        self.assertEqual("issue", violations[0]["type"])
+        self.assertEqual("pycodestyle", violations[0]["check_name"])
+        self.assertEqual(["Style"], violations[0]["categories"])
+
+    def test_error1_and_error2(self):
+        self.formatter.start()
+        self.formatter.handle(self.error1)
+        self.formatter.handle(self.error2)
+        self.formatter.stop()
+
+        with open(self.options.output_file) as fp:
+            violations = json.load(fp)
+
+        self.assertEqual(2, len(violations))
+        self.assertEqual("issue", violations[1]["type"])
+        self.assertEqual("unknown", violations[1]["check_name"])

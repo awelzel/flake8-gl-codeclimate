@@ -1,18 +1,12 @@
 import hashlib
-import logging
-import re
+import json
 
-from flake8.style_guide import Violation
 from flake8.formatting.base import BaseFormatter
 
 from flake8.plugins.pyflakes import FLAKE8_PYFLAKES_CODES
 from mccabe import McCabeChecker
 PYFLAKE_CODES = frozenset(FLAKE8_PYFLAKES_CODES.values())
 MCCABE_CODES = frozenset([McCabeChecker._code])
-
-
-LOGGER = logging.getLogger(__name__)
-
 
 
 class GitlabCodeClimateFormatter(BaseFormatter):
@@ -36,6 +30,8 @@ class GitlabCodeClimateFormatter(BaseFormatter):
         elif v.code.startswith("E") or v.code.startswith("W"):
             return "pycodestyle"
 
+        # TODO: Check the flake8 extensions entrypoint - it should list
+        #       error code to tools...
         return "unknown"
 
     @classmethod
@@ -65,7 +61,7 @@ class GitlabCodeClimateFormatter(BaseFormatter):
     @classmethod
     def _violation_to_codeclimate_issue(cls, v):
         """
-        Given a flake8.style_guide.Violation, create a codeclimate issue.
+        Given a Violation/error, create a codeclimate issue.
 
         This is pretty basic for now - the idea to only support the subset
         that Gitlab is actually interested in.
@@ -75,7 +71,7 @@ class GitlabCodeClimateFormatter(BaseFormatter):
         return {
             "type": "issue",
             "check_name": cls._guess_check_name(v),
-            "description": v.text,
+            "description": "{} [{}]".format(v.text, v.code),
             # "content": content -- Optional. A markdown snippet describing the
             # issue, including deeper explanations and links to other resources.
             "categories": cls._guess_categories(v),
@@ -96,3 +92,38 @@ class GitlabCodeClimateFormatter(BaseFormatter):
             #             of the issue found.
             "fingerprint": cls._make_fingerprint(v),
         }
+
+    def after_init(self):
+        self.__error_written = False  # was an error printed
+        self.__indent = 4 * " "
+
+    def write(self, line, source=None):
+        """
+        Because this outputs a json structure, ignore source and also
+        do not add newlines to the output...
+        """
+        if self.output_fd is not None:
+            self.output_fd.write(line)
+        if self.output_fd is None or self.options.tee:
+            print(line, end="")
+
+    def start(self):
+        super().start()
+        self.write("[", source=None)
+
+    def stop(self):
+        if self.__error_written:
+            self.write(self.newline)
+
+        self.write("]" + self.newline)
+        super().stop()
+
+    def handle(self, error):
+        if self.__error_written:
+            self.write(",")
+
+        # Indent
+        self.write(self.newline + self.__indent)
+        self.write(json.dumps(self._violation_to_codeclimate_issue(error)))
+
+        self.__error_written = True

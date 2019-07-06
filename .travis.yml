@@ -1,0 +1,15 @@
+language: python
+python:
+  - '3.7'
+install:
+  - pip install flake8
+script:
+  - flake8 flake8_gl_codeclimate scripts tests
+  - python -m unittest discover -s ./tests -v
+deploy:
+  provider: pypi
+  user: awelzel
+  on:
+    tags: true
+  password:
+    secure: bV+Hd8iWalw8sHmfODLvOEOxQjGM4hzmhz9Vm+8BvRe3vfO1VULzMn9Hy/lj+rYckXeftYZQMdl9HqwgNQE5j2udIHA01OjnThJLeDH/4jQoR1OMGBuD3ycPibVI+Q9evMmN1lCS9Z5Hf7CR9EDTZrmEZutN/yQ9Iy5Y5nJ+U6AIDt+2XLgTYd6brWdvv3V8NpXUpBgDKZkrzprBn4GCdHfPdr5Iq/zKhrQPp7cQmSvRoxVWTJm/pbN6WTyVuHUel2WYWBtddA2TWAZo3LPTHMMBYY8dwlRZjuBYkqvE2FF4rK4Xsoar9/iretqEh+FQPXORm83oEF1a37hwgroRhBLGYgz37MMlzJKKjCI3VAl9PZVHy2KcDGyPu/xiARCufOZ0QT7SLVXum+wwqNggG+5HSAV+6Rs+V3fVIAN0tM4VuRllFerxS+4zvvKXvcS9jW4j9bY994N6+ohFY1YQimy6JOT/7irHm1cKnsDSwHtCxVNPWPUux5MAlLi1oPljpjBplz1HYqd/ZfLtupxpGJ1qCx7kLqPpCqM3eHRDPWoWBsnkfQgsBGLDMtacrOcXHgeMPy9gZVfRwy0jdV/6iymPFjjix7yinHUjsWtNcv78rUj26NWLpnFbZ++O9odWFtjncsHltH2wPQQ5w6emTE//KMIo8VnUuu5QmQI8PqI=

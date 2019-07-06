@@ -1,18 +1,8 @@
-# This file is a template, and might need editing before it works on your project.
-# Official language image. Look for the different tagged releases at:
-# https://hub.docker.com/r/library/python/tags/
 image: python:latest
 
-# Change pip's cache directory to be inside the project directory since we can
-# only cache local items.
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 
-# Pip's cache doesn't store the python packages
-# https://pip.pypa.io/en/stable/reference/pip_install/#caching
-#
-# If you want to also cache the installed packages, you have to install
-# them in a virtualenv and cache it as well.
 cache:
   paths:
     - .cache/pip
@@ -20,12 +10,21 @@ cache:
 
 before_script:
   - python -V  # Print out python version for debugging
+  - pip install flake8 flake8-logging-format
 
-test:
+flake8:
   script:
-    - pip install flake8
-    - flake8 --exit-zero --format pylint flake8_gitlab_codeclimate | tee -a report.txt
+    - flake8 --exit-zero --format pylint --output-file flake8.txt --tee flake8_gitlab_codeclimate scripts
     - PYTHONPATH=. python scripts/report-to-codeclimate.py < report.txt > gl-code-quality-report.json
   artifacts:
     reports:
       codequality: gl-code-quality-report.json
+
+test:
+  script:
+    - pip install .
+    - flake8 --exit-zero --format gl-codeclimate --output-file examples-report.json --tee examples/
+    - python -m json.tool < examples-report.json
+
+    - flake8 --exit-zero --format gl-codeclimate --output-file hello-world-report.json --tee examples/hello-world.py
+    - python -m json.tool < hello-world-report.json
