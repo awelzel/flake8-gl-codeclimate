@@ -1,13 +1,13 @@
 # flake8-gitlab-codeclimate
 
-Flake8 formatter producing [Gitlab Code Quality artifacts][1].
+[![Build Status](https://travis-ci.org/awelzel/flake8-gl-codeclimate.svg?branch=master)](https://travis-ci.org/awelzel/flake8-gl-codeclimate)
 
-Gitlab Code Quality artifacts are a subset of the [Code Climate spec][2].
+Flake8 formatter producing [Gitlab Code Quality artifacts][1].
 
 ## Usage
 
-It is possible to output to console. However, the purpose of this
-formatter is to produce a JSON file that is stored as Code Quality artifact
+By default, Flake8 will print to standard output. However, the purpose of this
+formatter is to produce a JSON file that is then stored as Code Quality artifact
 by Gitlab (see below) - the output itself isn't very human-readable:
 ```
 $ pip install flake8-gl-codeclimate
@@ -20,7 +20,7 @@ $ flake8 --format gl-codeclimate examples/trailing-whitespace.py
 ## Adding it to Gitlab
 
 To enable Code Quality reports based on Flake8 in Gitlab merge requests,
-add a configuration as follows your projects `gitlab-ci.yml` file.
+add a configuration as follows to your projects `gitlab-ci.yml` file.
 
 ```
 flake8:
@@ -31,8 +31,14 @@ flake8:
     reports:
       codequality: gl-code-quality-report.json
 ```
-This will upload the `gl-code-quality-report.json` to Gitlab and you will
-start to see code quality improvements / degradations in merge requests.
+This will upload the `gl-code-quality-report.json` as Gitlab Code Quality artifact.
+Afterwards, code quality improvements and degradations should show up in
+merge requests on Gitlab.
+
+Gitlab Code Quality artifacts are a subset of the [Code Climate spec][2].
+
+Have fun!
+
 
 [1]: https://docs.gitlab.com/ee/user/project/merge_requests/code_quality.html
 [2]: https://github.com/codeclimate/spec/blob/master/SPEC.md#data-types
