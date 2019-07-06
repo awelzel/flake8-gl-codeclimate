@@ -1,4 +1,4 @@
-# flake8-gitlab-codeclimate
+# flake8-gl-codeclimate
 
 [![Build Status](https://travis-ci.org/awelzel/flake8-gl-codeclimate.svg?branch=master)](https://travis-ci.org/awelzel/flake8-gl-codeclimate)
 
