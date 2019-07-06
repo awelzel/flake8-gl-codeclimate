@@ -1,15 +1,15 @@
 language: python
 python:
-  - '3.7'
+- '3.7'
 install:
-  - pip install flake8
+- pip install flake8
 script:
-  - flake8 flake8_gl_codeclimate scripts tests
-  - python -m unittest discover -s ./tests -v
+- flake8 flake8_gl_codeclimate scripts tests
+- python -m unittest discover -s ./tests -v
 deploy:
   provider: pypi
   user: awelzel
   on:
     tags: true
   password:
-    secure: bV+Hd8iWalw8sHmfODLvOEOxQjGM4hzmhz9Vm+8BvRe3vfO1VULzMn9Hy/lj+rYckXeftYZQMdl9HqwgNQE5j2udIHA01OjnThJLeDH/4jQoR1OMGBuD3ycPibVI+Q9evMmN1lCS9Z5Hf7CR9EDTZrmEZutN/yQ9Iy5Y5nJ+U6AIDt+2XLgTYd6brWdvv3V8NpXUpBgDKZkrzprBn4GCdHfPdr5Iq/zKhrQPp7cQmSvRoxVWTJm/pbN6WTyVuHUel2WYWBtddA2TWAZo3LPTHMMBYY8dwlRZjuBYkqvE2FF4rK4Xsoar9/iretqEh+FQPXORm83oEF1a37hwgroRhBLGYgz37MMlzJKKjCI3VAl9PZVHy2KcDGyPu/xiARCufOZ0QT7SLVXum+wwqNggG+5HSAV+6Rs+V3fVIAN0tM4VuRllFerxS+4zvvKXvcS9jW4j9bY994N6+ohFY1YQimy6JOT/7irHm1cKnsDSwHtCxVNPWPUux5MAlLi1oPljpjBplz1HYqd/ZfLtupxpGJ1qCx7kLqPpCqM3eHRDPWoWBsnkfQgsBGLDMtacrOcXHgeMPy9gZVfRwy0jdV/6iymPFjjix7yinHUjsWtNcv78rUj26NWLpnFbZ++O9odWFtjncsHltH2wPQQ5w6emTE//KMIo8VnUuu5QmQI8PqI=
+    secure: Tvflg17t5HR2bbGFxXfwnErLezNED/OAGt+GbT7V0/JUEm06+nQ0omMNE/zaUaARbifTgDACxHsf3aAopWUswxWHHytPi3GuBmfRaBPNQNfXW9FD6Xjn6XJkF26NsqEpg4A80LQz/4yDcJjBL26exfBsuhCrGmya9XY6FjtKkx1bL02IQxdSowjwRFa01ePzK31AnMJTlIFePa2LONHKHFxaLniojTKH6WUD8gOV+BWvz/N/UPf8V6LtfhnLu2ivrF3cFOmJnxqWQ8GKdRQU4MhIDLEXemgJpISxyzXhapWHXIxW2JhZ2CjKTCOUjb9In61bPtnIZ1actCrrmvvHF/6iGRRRxAZ1mQK0XpkCcqIju0ZsuHkq0Ek5JqCoS4ud76sHUAPiWu0YlsbXcJlWcVq58cKE1S38+CSNHIGHoKB3NkIBOsZsHQpU+qkKxs1vgjUSkgMG/keMeR+kCb6st4uaRsjQcABCsYmYdSfkGc8LeFQwvhWwyx1S2+BxUJ/9FObVvb03GP1y7JqLDqDm5e24VxPwlFN58qgsnawpjkB6cj8TqlYS3M5tK7r4/3qbYjpjGrEN7d1zW6kPWEaczxjoomcHB7Pg2yp17GYvDEmEoFfaRHBabw+wLPpo5MfWDaCMI/NFc4411uP0qI5LYPpq1oxpS2z1baZl2m41K7Y=
