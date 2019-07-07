@@ -5,7 +5,8 @@ install:
 - pip install flake8 flake8-bugbear flake8-logging-format
 script:
 - flake8 flake8_gl_codeclimate scripts tests
-- PYTHONPATH=. python -m unittest discover -s ./tests -v
+- pip install .
+- python -m unittest discover -s ./tests -v
 deploy:
   provider: pypi
   user: awelzel
