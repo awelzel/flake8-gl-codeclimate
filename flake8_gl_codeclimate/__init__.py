@@ -16,8 +16,6 @@ class GitlabCodeClimateFormatter(BaseFormatter):
     """
     @classmethod
     def _make_fingerprint(cls, v):
-        """
-        """
         b = bytes(" ".join([str(getattr(v, f)) for f in v._fields]), "utf-8")
         return hashlib.sha1(b).hexdigest()
 
@@ -79,7 +77,7 @@ class GitlabCodeClimateFormatter(BaseFormatter):
         This is pretty basic for now - the idea to only support the subset
         that Gitlab is actually interested in.
 
-        https://docs.gitlab.com/ee/user/project/merge_requests/code_quality.html#how-it-works
+        https://docs.gitlab.com/ee/user/project/merge_requests/code_quality.html#how-it-works  # noqa
         """
         return {
             "type": "issue",

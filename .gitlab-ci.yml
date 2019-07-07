@@ -15,7 +15,7 @@ before_script:
 flake8:
   script:
     - flake8 --exit-zero --format pylint --output-file flake8.txt --tee flake8_gitlab_codeclimate scripts
-    - PYTHONPATH=. python scripts/report-to-codeclimate.py < flake8.txt > gl-code-quality-report.json
+    - PYTHONPATH=. python scripts/report-to-gl-codeclimate.py < flake8.txt > gl-code-quality-report.json
   artifacts:
     reports:
       codequality: gl-code-quality-report.json
@@ -25,6 +25,3 @@ test:
     - pip install .
     - flake8 --exit-zero --format gl-codeclimate --output-file examples-report.json --tee examples/
     - python -m json.tool < examples-report.json
-
-    - flake8 --exit-zero --format gl-codeclimate --output-file hello-world-report.json --tee examples/hello-world.py
-    - python -m json.tool < hello-world-report.json
