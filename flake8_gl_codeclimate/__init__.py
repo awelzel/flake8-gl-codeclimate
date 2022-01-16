@@ -98,10 +98,11 @@ class GitlabCodeClimateFormatter(BaseFormatter):
             # remediation_points -- Optional. An integer indicating a rough
             #                       estimate of how long it would take to resolve
             #                       the reported issue.
-            # severity -- Optional. A Severity string (info, minor, major,
-            #             critical, or blocker) describing the potential impact
-            #             of the issue found.
             "fingerprint": cls._make_fingerprint(v),
+            # severity -- Required. A Severity string (info, minor, major,
+            #             critical, or blocker) describing the potential impact
+            #             of the issue found. Use minor by default.
+            "severity": "major" if v.code.startswith("E") else "minor",
         }
 
     def after_init(self):
