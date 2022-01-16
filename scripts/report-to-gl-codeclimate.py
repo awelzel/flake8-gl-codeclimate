@@ -21,14 +21,14 @@ LOGGER = logging.getLogger(__name__)
 flake8_fmt_re = re.compile(r"^([^ ]+):([0-9]+):([0-9]+): ([^ ]+) (.+)$")
 
 
-def violation_from_flake8_line(l):
+def violation_from_flake8_line(line):
     """
     Given a line in "default format, parse out a Violation.
 
         examples/unused-module.py:5:1: F401 'sys' imported but unused
 
     """
-    match = flake8_fmt_re.match(l.strip())
+    match = flake8_fmt_re.match(line.strip())
     if match is None:
         return None
 
@@ -47,16 +47,16 @@ def violation_from_flake8_line(l):
 pylint_fmt_re = re.compile(r"^([^ ]+):([0-9]+): \[([^ ]+)\] (.+)$")
 
 
-def violation_from_pylint_line(l):
+def violation_from_pylint_line(line):
     """
     Given a line in "pylint" format, parse out a Violation.
 
-    >>> l = 'tourmap/json.py:23: [E302] expected 2 blank lines, found 1'
-    >>> v = violation_from_pylint_line(l)
+    >>> line = 'tourmap/json.py:23: [E302] expected 2 blank lines, found 1'
+    >>> v = violation_from_pylint_line(line)
     >>> v.code, v.filename, v.line_number, v.text
     ('E302', 'tourmap/json.py', 23, 'expected 2 blank lines, found 1')
     """
-    match = pylint_fmt_re.match(l.strip())
+    match = pylint_fmt_re.match(line.strip())
     if match is None:
         return None
 
@@ -82,10 +82,10 @@ def main():
 
     fmt = flake8_gl_codeclimate.GitlabCodeClimateFormatter(options)
     fmt.start()
-    for l in options.input_file:
-        v = violation_from_flake8_line(l)
+    for line in options.input_file:
+        v = violation_from_flake8_line(line)
         if v is None:
-            v = violation_from_pylint_line(l)
+            v = violation_from_pylint_line(line)
         if v is None:
             ignored += 1
             continue
