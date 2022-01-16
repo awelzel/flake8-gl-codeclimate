@@ -78,6 +78,7 @@ class TestGitlabCodeClimateFormatter(unittest.TestCase):
         self.assertEqual("issue", violations[0]["type"])
         self.assertEqual("pycodestyle", violations[0]["check_name"])
         self.assertEqual(["Style"], violations[0]["categories"])
+        self.assertEqual("major", violations[0]["severity"])
 
     def test_error1_and_error2(self):
         self.formatter.start()
@@ -91,6 +92,7 @@ class TestGitlabCodeClimateFormatter(unittest.TestCase):
         self.assertEqual(2, len(violations))
         self.assertEqual("issue", violations[1]["type"])
         self.assertEqual("unknown", violations[1]["check_name"])
+        self.assertEqual("minor", violations[1]["severity"])
 
     def test_logging_errro(self):
         self.formatter.start()
@@ -102,6 +104,7 @@ class TestGitlabCodeClimateFormatter(unittest.TestCase):
 
         self.assertEqual(1, len(violations))
         self.assertEqual("logging-format", violations[0]["check_name"])
+        self.assertEqual("minor", violations[0]["severity"])
 
     def test_complexity_error(self):
         self.formatter.start()
@@ -114,3 +117,4 @@ class TestGitlabCodeClimateFormatter(unittest.TestCase):
         self.assertEqual(1, len(violations))
         self.assertEqual("mccabe", violations[0]["check_name"])
         self.assertEqual(["Complexity"], violations[0]["categories"])
+        self.assertEqual("minor", violations[0]["severity"])
