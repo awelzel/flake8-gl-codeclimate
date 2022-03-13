@@ -1,3 +1,4 @@
+from __future__ import print_function
 import hashlib
 import json
 
@@ -120,7 +121,7 @@ class GitlabCodeClimateFormatter(BaseFormatter):
             print(line, end="")
 
     def start(self):
-        super().start()
+        super(self).start()
         self.write("[", source=None)
 
     def stop(self):
@@ -128,7 +129,7 @@ class GitlabCodeClimateFormatter(BaseFormatter):
             self.write(self.newline)
 
         self.write("]" + self.newline)
-        super().stop()
+        super(self).stop()
 
     def handle(self, error):
         if self.__error_written:
