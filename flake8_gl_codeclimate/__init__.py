@@ -17,7 +17,7 @@ class GitlabCodeClimateFormatter(BaseFormatter):
     """
     @classmethod
     def _make_fingerprint(cls, v):
-        b = bytes(" ".join([str(getattr(v, f)) for f in v._fields]), "utf-8")
+        b = " ".join([str(getattr(v, f)) for f in v._fields]).encode("utf-8")
         return hashlib.sha1(b).hexdigest()
 
     @classmethod
