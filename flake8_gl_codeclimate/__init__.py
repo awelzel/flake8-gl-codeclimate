@@ -121,7 +121,7 @@ class GitlabCodeClimateFormatter(BaseFormatter):
             print(line, end="")
 
     def start(self):
-        super(self).start()
+        super(GitlabCodeClimateFormatter, self).start()
         self.write("[", source=None)
 
     def stop(self):
@@ -129,7 +129,7 @@ class GitlabCodeClimateFormatter(BaseFormatter):
             self.write(self.newline)
 
         self.write("]" + self.newline)
-        super(self).stop()
+        super(GitlabCodeClimateFormatter, self).stop()
 
     def handle(self, error):
         if self.__error_written:
