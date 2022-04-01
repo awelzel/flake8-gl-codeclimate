@@ -25,6 +25,8 @@ class GitlabCodeClimateFormatter(BaseFormatter):
             return "mccabe"
         elif v.code in PYFLAKE_CODES:
             return "pyflakes"
+        elif v.code.startswith("D"):
+            return "pydocstyle"
         elif v.code.startswith("E") or v.code.startswith("W"):
             return "pycodestyle"
         elif v.code.startswith("G"):
@@ -58,7 +60,7 @@ class GitlabCodeClimateFormatter(BaseFormatter):
         TODO: This isn't really implemented.
         """
         result = []
-        if cls._guess_check_name(v) == "pycodestyle":
+        if cls._guess_check_name(v) in ("pycodestyle", "pydocstyle"):
             result.append("Style")
         if cls._guess_check_name(v) == "mccabe":
             result.append("Complexity")
