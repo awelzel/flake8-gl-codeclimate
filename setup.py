@@ -1,9 +1,10 @@
 import setuptools
+import setuptools_scm
 
 setuptools.setup(
     name="flake8-gl-codeclimate",
     license="MIT",
-    version="0.1.5",
+    use_scm_version=True,
     description="Gitlab Code Quality artifact Flake8 formatter.",
     author="Arne Welzel",
     author_email="arne.welzel@gmail.com",
@@ -13,6 +14,9 @@ setuptools.setup(
     ],
     install_requires=[
         "flake8 > 3.0.0",
+    ],
+    setup_requires=[
+        "setuptools_scm",
     ],
     scripts=[
         "scripts/report-to-gl-codeclimate.py",
