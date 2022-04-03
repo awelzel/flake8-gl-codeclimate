@@ -53,6 +53,15 @@ class TestGitlabCodeClimateFormatter(unittest.TestCase):
             physical_line=None,
         )
 
+        self.security_error = Violation(
+            code="S102",  # This is coming from flake8-bandit
+            filename="examples/insecure-code.py",
+            line_number=42,
+            column_number=None,
+            text="Use of exec detected",
+            physical_line=None,
+        )
+
     def tearDown(self):
         try:
             os.unlink(self.options.output_file)
@@ -118,3 +127,16 @@ class TestGitlabCodeClimateFormatter(unittest.TestCase):
         self.assertEqual("mccabe", violations[0]["check_name"])
         self.assertEqual(["Complexity"], violations[0]["categories"])
         self.assertEqual("minor", violations[0]["severity"])
+
+    def test_security_error(self):
+        self.formatter.start()
+        self.formatter.handle(self.security_error)
+        self.formatter.stop()
+
+        with open(self.options.output_file) as fp:
+            violations = json.load(fp)
+
+        self.assertEqual(1, len(violations))
+        self.assertEqual("bandit", violations[0]["check_name"])
+        self.assertEqual(["Security"], violations[0]["categories"])
+        self.assertEqual("critical", violations[0]["severity"])
