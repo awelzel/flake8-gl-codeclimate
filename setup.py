@@ -1,5 +1,4 @@
 import setuptools
-import setuptools_scm
 
 setuptools.setup(
     name="flake8-gl-codeclimate",
