@@ -31,6 +31,8 @@ class GitlabCodeClimateFormatter(BaseFormatter):
             return "pycodestyle"
         elif v.code.startswith("G"):
             return "logging-format"
+        elif v.code.startswith("R"):
+            return "radon"
         elif v.code.startswith("S"):
             return "bandit"
 
@@ -64,7 +66,7 @@ class GitlabCodeClimateFormatter(BaseFormatter):
         result = []
         if cls._guess_check_name(v) in ("pycodestyle", "pydocstyle"):
             result.append("Style")
-        if cls._guess_check_name(v) == "mccabe":
+        if cls._guess_check_name(v) in ("mccabe", "radon"):
             result.append("Complexity")
         if cls._guess_check_name(v) == "bandit":
             result.append("Security")
