@@ -25,12 +25,16 @@ class GitlabCodeClimateFormatter(BaseFormatter):
             return "mccabe"
         elif v.code in PYFLAKE_CODES:
             return "pyflakes"
+        elif v.code.startswith("D"):
+            return "pydocstyle"
         elif v.code.startswith("E") or v.code.startswith("W"):
             return "pycodestyle"
         elif v.code.startswith("G"):
             return "logging-format"
         elif v.code.startswith("R"):
             return "radon"
+        elif v.code.startswith("S"):
+            return "bandit"
 
         # TODO: Check the flake8 extensions entrypoint - it should list
         #       error code that extensions are using...
@@ -60,16 +64,38 @@ class GitlabCodeClimateFormatter(BaseFormatter):
         TODO: This isn't really implemented.
         """
         result = []
-        if cls._guess_check_name(v) == "pycodestyle":
+        if cls._guess_check_name(v) in ("pycodestyle", "pydocstyle"):
             result.append("Style")
         if cls._guess_check_name(v) in ("mccabe", "radon"):
             result.append("Complexity")
+        if cls._guess_check_name(v) == "bandit":
+            result.append("Security")
 
         # Need at least one? Default to BugRisk
         if not result:
             result.append("Bug Risk")
 
         return result
+
+    @classmethod
+    def _guess_severity(cls, v):
+        """
+        Try to guess the severity of the violation.
+
+        severity = {
+            "info"
+            "minor"
+            "major"
+            "critical"
+            "blocker"
+        }
+        """
+        if v.code.startswith("E"):  # error
+            return "major"
+        if v.code.startswith("S"):  # security
+            return "critical"
+
+        return "minor"
 
     @classmethod
     def _violation_to_codeclimate_issue(cls, v):
@@ -104,7 +130,7 @@ class GitlabCodeClimateFormatter(BaseFormatter):
             # severity -- Required. A Severity string (info, minor, major,
             #             critical, or blocker) describing the potential impact
             #             of the issue found. Use minor by default.
-            "severity": "major" if v.code.startswith("E") else "minor",
+            "severity": cls._guess_severity(v),
         }
 
     def after_init(self):
