@@ -115,7 +115,9 @@ class GitlabCodeClimateFormatter(BaseFormatter):
             # issue, including deeper explanations and links to other resources.
             "categories": cls._guess_categories(v),
             "location": {
-                "path": v.filename,
+                # remove "./" at the beginning of the filename
+                # see: https://docs.gitlab.com/ee/ci/testing/code_quality.html#implementing-a-custom-tool
+                "path": v.filename[2:],
                 "lines": {
                     "begin": v.line_number,
                     "end": v.line_number,
