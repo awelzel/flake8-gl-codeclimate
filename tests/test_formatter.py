@@ -56,7 +56,7 @@ class TestGitlabCodeClimateFormatter(unittest.TestCase):
 
         self.security_error = Violation(
             code="S102",  # This is coming from flake8-bandit
-            filename="./examples/insecure-code.py",
+            filename="examples/insecure-code.py",
             line_number=42,
             column_number=None,
             text="Use of exec detected",
@@ -141,6 +141,17 @@ class TestGitlabCodeClimateFormatter(unittest.TestCase):
         self.assertEqual("bandit", violations[0]["check_name"])
         self.assertEqual(["Security"], violations[0]["categories"])
         self.assertEqual("critical", violations[0]["severity"])
+
+    def test_error_filepath_with_prefix(self):
+        self.formatter.start()
+        self.formatter.handle(self.security_error)
+        self.formatter.stop()
+
+        with open(self.options.output_file) as fp:
+            violations = json.load(fp)
+
+        self.assertEqual(1, len(violations))
+        self.assertEqual("examples/insecure-code.py", violations[0]["location"]["path"])
 
     def test_error_filepath(self):
         self.formatter.start()
