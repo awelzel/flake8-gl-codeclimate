@@ -77,6 +77,7 @@ def main():
                         default=sys.stdin)
     parser.add_argument("--output-file", type=str)
     parser.add_argument("--tee", action="store_true", default=False)
+    parser.add_argument("--color", choices=["auto", "always", "never"], default="never")
     options = parser.parse_args()
     ignored = 0
 

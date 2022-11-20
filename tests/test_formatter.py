@@ -12,9 +12,10 @@ from flake8_gl_codeclimate import GitlabCodeClimateFormatter
 class TestGitlabCodeClimateFormatter(unittest.TestCase):
 
     def setUp(self):
-        self.options = unittest.mock.Mock(["output_file", "tee"])
+        self.options = unittest.mock.Mock(["output_file", "tee", "color"])
         self.options.output_file = tempfile.mktemp(suffix=".json", dir=".")
         self.options.tee = False
+        self.options.color = "auto"
 
         self.formatter = GitlabCodeClimateFormatter(self.options)
         self.error1 = Violation(
