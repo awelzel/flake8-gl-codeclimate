@@ -115,8 +115,6 @@ class GitlabCodeClimateFormatter(BaseFormatter):
             # issue, including deeper explanations and links to other resources.
             "categories": cls._guess_categories(v),
             "location": {
-                # remove "./" at the beginning of the filename if it exists
-                # to be consistent with GitLab's code quality report artifact spec
                 "path": v.filename[2:] if v.filename.startswith("./") else v.filename,
                 "lines": {
                     "begin": v.line_number,
