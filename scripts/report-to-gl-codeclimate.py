@@ -17,6 +17,9 @@ from flake8.style_guide import Violation
 
 LOGGER = logging.getLogger(__name__)
 
+# Strip ansi escape codes from input
+ansi_ctrl = re.compile(r"\033\[[0-9]*m")
+
 # %(path)s:%(row)d:%(col)d: %(code)s %(text)s
 flake8_fmt_re = re.compile(r"^([^ ]+):([0-9]+):([0-9]+): ([^ ]+) (.+)$")
 
@@ -84,6 +87,7 @@ def main():
     fmt = flake8_gl_codeclimate.GitlabCodeClimateFormatter(options)
     fmt.start()
     for line in options.input_file:
+        line = ansi_ctrl.sub("", line)
         v = violation_from_flake8_line(line)
         if v is None:
             v = violation_from_pylint_line(line)

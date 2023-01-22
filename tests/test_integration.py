@@ -57,7 +57,6 @@ class TestGtlabCodeClimate(unittest.TestCase):
         args = [
             "flake8",
             "--output-file", self.flake8_output_fn,
-            "--color", "never",
             "examples/bad.py",
         ]
         subprocess.call(args)
@@ -82,7 +81,6 @@ class TestGtlabCodeClimate(unittest.TestCase):
             "flake8",
             "--format", "pylint",
             "--output-file", self.flake8_output_fn,
-            "--color", "never",
             "examples/bad.py",
         ]
         subprocess.call(args)
@@ -108,7 +106,6 @@ class TestGtlabCodeClimate(unittest.TestCase):
             "flake8",
             "--show-source",
             "--output-file", self.flake8_output_fn,
-            "--color", "never",
             "examples/bad.py",
         ]
         subprocess.call(args)
