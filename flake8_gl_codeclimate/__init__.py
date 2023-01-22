@@ -2,9 +2,10 @@ import hashlib
 import json
 
 from flake8.formatting.base import BaseFormatter
-
 from flake8.plugins.pyflakes import FLAKE8_PYFLAKES_CODES
+
 from mccabe import McCabeChecker
+
 PYFLAKE_CODES = frozenset(FLAKE8_PYFLAKES_CODES.values())
 MCCABE_CODES = frozenset([McCabeChecker._code])
 
@@ -17,7 +18,7 @@ class GitlabCodeClimateFormatter(BaseFormatter):
     @classmethod
     def _make_fingerprint(cls, v):
         b = bytes(" ".join([str(getattr(v, f)) for f in v._fields]), "utf-8")
-        return hashlib.sha1(b).hexdigest()
+        return hashlib.sha1(b).hexdigest()  # noqa: S324
 
     @classmethod
     def _guess_check_name(cls, v):
@@ -31,8 +32,12 @@ class GitlabCodeClimateFormatter(BaseFormatter):
             return "pycodestyle"
         elif v.code.startswith("G"):
             return "logging-format"
+        elif v.code.startswith("I"):
+            return "import-order"
         elif v.code.startswith("R"):
             return "radon"
+        elif v.code.startswith("SIM"):
+            return "simplify"
         elif v.code.startswith("S"):
             return "bandit"
 
@@ -64,11 +69,16 @@ class GitlabCodeClimateFormatter(BaseFormatter):
         TODO: This isn't really implemented.
         """
         result = []
-        if cls._guess_check_name(v) in ("pycodestyle", "pydocstyle"):
+        check_name = cls._guess_check_name(v)
+        style_checks = {"import-order", "pycodestyle", "pydocstyle", "simplify"}
+
+        if check_name in style_checks:
             result.append("Style")
-        if cls._guess_check_name(v) in ("mccabe", "radon"):
+        if check_name == "simplify":
+            result.append("Clarity")
+        if check_name in ("mccabe", "radon"):
             result.append("Complexity")
-        if cls._guess_check_name(v) == "bandit":
+        if check_name == "bandit":
             result.append("Security")
 
         # Need at least one? Default to BugRisk

@@ -11,8 +11,9 @@ import logging
 import re
 import sys
 
+import flake8.style_guide
+
 import flake8_gl_codeclimate
-from flake8.style_guide import Violation
 
 
 LOGGER = logging.getLogger(__name__)
@@ -36,7 +37,7 @@ def violation_from_flake8_line(line):
         return None
 
     filename, line_number, column_number, code, text = match.groups()
-    return Violation(
+    return flake8.style_guide.Violation(
         code=code,
         filename=filename,
         line_number=int(line_number),
@@ -64,7 +65,7 @@ def violation_from_pylint_line(line):
         return None
 
     filename, line_number, code, text = match.groups()
-    return Violation(
+    return flake8.style_guide.Violation(
         code=code,
         filename=filename,
         line_number=int(line_number),

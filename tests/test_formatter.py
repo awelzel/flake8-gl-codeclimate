@@ -1,5 +1,4 @@
 import json
-import os
 import tempfile
 import unittest
 import unittest.mock
@@ -13,7 +12,8 @@ class TestGitlabCodeClimateFormatter(unittest.TestCase):
 
     def setUp(self):
         self.options = unittest.mock.Mock(["output_file", "tee", "color"])
-        self.options.output_file = tempfile.mktemp(suffix=".json", dir=".")
+        self.output_f = tempfile.NamedTemporaryFile(suffix=".json", dir=".")
+        self.options.output_file = self.output_f.name
         self.options.tee = False
         self.options.color = "auto"
 
@@ -64,10 +64,7 @@ class TestGitlabCodeClimateFormatter(unittest.TestCase):
         )
 
     def tearDown(self):
-        try:
-            os.unlink(self.options.output_file)
-        except FileNotFoundError:
-            pass
+        self.output_f.close()
 
     def test_no_errors(self):
         self.formatter.start()
