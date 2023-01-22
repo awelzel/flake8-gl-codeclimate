@@ -20,7 +20,7 @@ class TestGitlabCodeClimateFormatter(unittest.TestCase):
         self.formatter = GitlabCodeClimateFormatter(self.options)
         self.error1 = Violation(
             code="E302",
-            filename="examples/hello-world.py",
+            filename="./examples/hello-world.py",
             line_number=23,
             column_number=None,
             text="expected 2 blank lines, found 1",
@@ -29,7 +29,7 @@ class TestGitlabCodeClimateFormatter(unittest.TestCase):
 
         self.error2 = Violation(
             code="X111",  # unknown
-            filename="examples/unknown.py",
+            filename="./examples/unknown.py",
             line_number=99,
             column_number=None,
             text="Some extension produced this.",
@@ -38,7 +38,7 @@ class TestGitlabCodeClimateFormatter(unittest.TestCase):
 
         self.logging_error = Violation(
             code="G001",  # This is coming from flake8-logging-format
-            filename="examples/logging-format.py",
+            filename="./examples/logging-format.py",
             line_number=4,
             column_number=None,
             text="Logging statement uses string.format()",
@@ -47,7 +47,7 @@ class TestGitlabCodeClimateFormatter(unittest.TestCase):
 
         self.complexity_error = Violation(
             code="C901",  # This is coming from flake8-logging-format
-            filename="examples/complex-code.py",
+            filename="./examples/complex-code.py",
             line_number=42,
             column_number=None,
             text="Something is too complex",
@@ -141,3 +141,25 @@ class TestGitlabCodeClimateFormatter(unittest.TestCase):
         self.assertEqual("bandit", violations[0]["check_name"])
         self.assertEqual(["Security"], violations[0]["categories"])
         self.assertEqual("critical", violations[0]["severity"])
+
+    def test_error_filepath_with_prefix(self):
+        self.formatter.start()
+        self.formatter.handle(self.security_error)
+        self.formatter.stop()
+
+        with open(self.options.output_file) as fp:
+            violations = json.load(fp)
+
+        self.assertEqual(1, len(violations))
+        self.assertEqual("examples/insecure-code.py", violations[0]["location"]["path"])
+
+    def test_error_filepath(self):
+        self.formatter.start()
+        self.formatter.handle(self.error1)
+        self.formatter.stop()
+
+        with open(self.options.output_file) as fp:
+            violations = json.load(fp)
+
+        self.assertEqual(1, len(violations))
+        self.assertEqual("examples/hello-world.py", violations[0]["location"]["path"])

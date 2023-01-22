@@ -115,7 +115,7 @@ class GitlabCodeClimateFormatter(BaseFormatter):
             # issue, including deeper explanations and links to other resources.
             "categories": cls._guess_categories(v),
             "location": {
-                "path": v.filename,
+                "path": v.filename[2:] if v.filename.startswith("./") else v.filename,
                 "lines": {
                     "begin": v.line_number,
                     "end": v.line_number,
