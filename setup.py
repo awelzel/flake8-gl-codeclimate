@@ -14,6 +14,8 @@ setuptools.setup(
     install_requires=[
         "flake8 > 3.0.0",
     ],
+    # Kept for travis ci not supporting pyproject builds
+    # https://github.com/travis-ci/dpl/issues/822
     setup_requires=[
         "setuptools_scm",
     ],

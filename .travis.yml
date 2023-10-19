@@ -33,3 +33,5 @@ jobs:
           tags: true
         password:
           secure: wE7XH0vbGHC2TzmyWv+CrLna5b+yixliwNLwjCCo2HUgVJdFqvdP3c+t1AeRHaaE+tcXoChMnG5eQfBg0WbsSh0hyGNyTBvDzrj36nBIFkvrvHpSah1ZTtFxBTbX8OI7BVmfepRYkxGcfOZrprFRFShBgVv3sqB9JvVOYfFaEVrZXmoPHBVk+7Wr5AksJTRzIRrGj2OuXOit9mmzumUBF8JAqtHvheEfmA4uJWPWP3VKEwNcnYV0isZBgTGE3K8ycaMWVd5no/EkIrbJqW+ZcnlGNGYfclBKVbFcxkx9Gz5Ho38mH9Cz1JEHcmP71vDKvm++Y7lcrQ+2pJWOk6fwtgdAxqcSioa2Rp2t/VCerO0sjO3Bn2M4HBCVxSqbasRmQnoiSGrNx0O0TZrA/jS+zomv/+HuBY70OZZygNGXQ/nsDiU/+30ZCKl+XunRJQiGYYyQksTJq4BvzWnvc3OChhhTEZzyZW1OecsXplfrxXamLC2VEHXm18lHBhssWFeSq7rocz1mFZVCNo8GcB50WeBQwKD+isllqSOaJTCahjkgHMcammyneuNQ/qP/NkJ6v+ve6S1UW0PSGW8MfLAxGLf+FQ3E2f+qZSp1q2cy0G1SddT3OX7WAg4KOfnGcuN5s3jWM5z1zsd71n8f4w7b3nMPDGeLJYxb0yw2F1C0IZE=
+        # Ship both wheel and sdist
+        distributions: "sdist bdist_wheel"
