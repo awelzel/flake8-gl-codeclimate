@@ -1,7 +1,5 @@
 # flake8-gl-codeclimate
 
-[![Build Status](https://travis-ci.org/awelzel/flake8-gl-codeclimate.svg?branch=master)](https://travis-ci.org/awelzel/flake8-gl-codeclimate)
-
 Flake8 formatter producing [Gitlab Code Quality artifacts][1].
 
 ## Usage
