@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools >= 77.0.3", "setuptools_scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flake8-gl-codeclimate"
+description = "Gitlab Code Quality artifact Flake8 formatter"
+authors = [
+  {name = "Arne Welzel", email = "arne.welzel@gmail.com"},
+]
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+dynamic = ["version"]
+dependencies = [
+  "flake8 >= 7.3.0",
+]
+
+[project.entry-points."flake8.report"]
+gl-codeclimate = "flake8_gl_codeclimate:GitlabCodeClimateFormatter"
+
+[tool.setuptools]
+packages = ["flake8_gl_codeclimate"]
+
+[tool.setuptools_scm]
